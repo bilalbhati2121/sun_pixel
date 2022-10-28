@@ -18,7 +18,7 @@ app.use(bhati)
 bilal()
 
 
-app.listen("3002", (req, rea) => {
+app.listen(3002, (req, rea) => {
     console.log("serva")
 })
 
