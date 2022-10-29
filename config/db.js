@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 export const bilal =async()=>{
     const conn =await mongoose.connect(
-       " mongodb+srv://prod:mWxFbsFDbJ0l2SEb@cluster0.lwfrsfa.mongodb.net/?retryWrites=true&w=majority"
+       "mongodb+srv://prod:mWxFbsFDbJ0l2SEb@cluster0.lwfrsfa.mongodb.net/?retryWrites=true&w=majority"
 
     )  
     console.log("Host----",conn.connection.host)
