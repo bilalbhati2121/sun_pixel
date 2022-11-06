@@ -65,7 +65,20 @@ export const upadeta = async (req, res) => {
       })
    }
 }
-// export const deletee= async(req,res)=>{
-//    const deleteekarene=await category.findByIdAndDelete({_id:req.body.id})
-// res.send(deleteekarene)
-// }
+export const deletee= async(req,res)=>{
+   const deleteekarene=await category.findByIdAndDelete({_id:req.body.id})
+if (deleteekarene) {
+   res.send({
+      status:true,
+      mgs:"yeh delete hai",
+      data:{}
+   })
+}else{
+   res.send({
+      status:true,
+      mgs:"yeh delete hai",
+      data:{}
+   })
+}
+
+}

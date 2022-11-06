@@ -24,7 +24,22 @@ const user = new mongoose.Schema({
     mobile: {
         type: Number,
         required: true
+    },
+    isnumber_verified: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    Number: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    otp:{
+     type:Number,
+     required:false   
     }
+
 })
 const idpass = mongoose.model("users", user)
 export default idpass;

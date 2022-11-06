@@ -505,3 +505,25 @@ export const datea = async (req, res) => {
         })
     }
 }
+
+
+export const ResendOtp = async (req, res) => {
+    var otp = 12345    
+    req.body.otp=otp
+    var data = await User.findByIdAndUpdate({_id:req.body.id},req.body)
+    if(data){
+       data.otp = otp
+       res.send({
+           status:true,
+           msg:"right",
+           data:data
+       })
+    }else{
+       res.send({
+           status:false,
+           msg:"worng",
+           data:data
+       })
+
+    }
+       }
