@@ -66,7 +66,9 @@ export const upadeta = async (req, res) => {
    }
 }
 export const deletee= async(req,res)=>{
+   // console.log("fddf")
    const deleteekarene=await category.findByIdAndDelete({_id:req.body.id})
+   // console.log(deleteekarene)
 if (deleteekarene) {
    res.send({
       status:true,
