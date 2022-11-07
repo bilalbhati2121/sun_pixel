@@ -270,8 +270,8 @@ export const school = async (req, res) => {
 export const login = async (req, res) => {
 
     // res.send('gfgfg')
-    var bilal = await User.findOne({ email: req.body.email });
-    //res.send(bilal)
+    var bilal = await User.findOne({email:req.body.email});
+    res.send(bilal)
     if (bilal) {
         var chechpassword = await bcrypt.compare(req.body.password, bilal.password)
         // res.send(chechpassword)
@@ -291,8 +291,9 @@ export const login = async (req, res) => {
                 data: {}
             })
         }
-
     }
+}
+    
     // fs. readFile("royal.josn",async(err,data)=>{
     //   var oldData = JSON.parse(data)
     //     var nweData=req.body;
@@ -342,7 +343,7 @@ export const login = async (req, res) => {
 
     // })
 
-}
+
 
 
 
