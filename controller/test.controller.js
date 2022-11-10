@@ -5,7 +5,7 @@ import User from "../models/user.models.js"
 export const signup = async (req, res) => {
     // res.send("yes !")
     try {
-        const pass = await User.findOne({ email: req.body.email })
+        const pass = await User.findOne({ username: req.body.username })
         const mobilecheckout = await User.findOne({ mobile: req.body.mobile })
         if (pass) {
             res.send({
@@ -270,7 +270,7 @@ export const school = async (req, res) => {
 export const login = async (req, res) => {
 
     // res.send('gfgfg')
-    var bilal = await User.findOne({email:req.body.email});
+    var bilal = await User.findOne({username:req.body.username});
     res.send(bilal)
     if (bilal) {
         var chechpassword = await bcrypt.compare(req.body.password, bilal.password)
