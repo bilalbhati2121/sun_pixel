@@ -33,8 +33,8 @@ export const signup = async (req, res) => {
 
             }
             res.send({
-                status: false,
-                mgs: ("fasht time age."),
+                status: true,
+                mgs:"Signup Successfully",
                 data: user
             });
         }
@@ -501,7 +501,7 @@ export const datea = async (req, res) => {
     } catch (err) {
         res.send({
             status: false,
-            mgs: "Delete api is not crrect",
+            mgs: "Delete api is not c",
             data: err
         })
     }
