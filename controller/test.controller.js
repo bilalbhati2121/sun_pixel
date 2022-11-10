@@ -9,7 +9,7 @@ export const signup = async (req, res) => {
         const mobilecheckout = await User.findOne({ mobile: req.body.mobile })
         if (pass) {
             res.send({
-                status: false,
+                status: true,
                 mgs: "Email already exist.",
                 data: {}
             });
@@ -281,13 +281,13 @@ export const login = async (req, res) => {
             //res.send(token)
             res.send({
                 status: true,
-                mgs: "login api sahi hai",
+                mgs: "login api is correct",
                 data: bilal
             })
         } else {
             res.send({
                 status: false,
-                mgs: "login api sahi nhi hai",
+                mgs: "login api is not correct",
                 data: {}
             })
         }
@@ -460,21 +460,21 @@ export const upadeta = async (req, res) => {
         if (datapass) {
             res.send({
                 status: true,
-                mgs: "yeh sahi hai ",
+                mgs: "Upadate api is correct",
                 data: datapass
             })
 
         } else {
             res.send({
                 status: false,
-                mgs: "yeh sahi nhi ",
+                mgs: "Update api is not correct ",
                 data: {}
             })
         }
     } catch (err) {
         res.send({
             status: false,
-            mgs: "yeh sahi nhi hai",
+            mgs: "Update api is not crrect",
             data: err
         })
     }
@@ -487,21 +487,21 @@ export const datea = async (req, res) => {
         if (datapass) {
             res.send({
                 status: true,
-                mgs: "yeh sahi hai ",
+                mgs: "Delete api is crrect",
                 data: datapass
             })
 
         } else {
             res.send({
                 status: false,
-                mgs: "yeh sahi nhi ",
+                mgs: "Delete api is not crrect",
                 data: {}
             })
         }
     } catch (err) {
         res.send({
             status: false,
-            mgs: "yeh sahi nhi hai",
+            mgs: "Delete api is not crrect",
             data: err
         })
     }
