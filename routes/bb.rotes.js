@@ -1,4 +1,4 @@
-import { bhati, bilal, school, login, signup, getdatapass, upadeta, datea ,ResendOtp} from "../controller/test.controller.js"
+import { bhati, bilal, school, login, signup, getdatapass, upadeta, datea ,ResendOtp,Forgetpassword} from "../controller/test.controller.js"
 import { authentication } from "../middleware/authentication.js"
 import Express from "express"
 
@@ -12,6 +12,5 @@ inesf.route("/getaai").get(authentication, getdatapass)
 inesf.route("/user/updeta/:id").put(authentication, upadeta)
 inesf.route("/user/Delete/:id").delete(authentication, datea)
 inesf.route("/user/otp").post(ResendOtp)
-
-//inesf.route("/felicereta").post(datapass)
+inesf.route("/Forget/password").post(Forgetpassword)
 export default inesf;

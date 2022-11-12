@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken"
 import fs from "fs"
 import bcrypt from "bcrypt"
 import User from "../models/user.models.js"
+import nodemailer from "nodemailer"
+export const mail = async (name, email, token) => {
+
+
+}
 export const signup = async (req, res) => {
     // res.send("yes !")
     try {
@@ -21,12 +26,13 @@ export const signup = async (req, res) => {
             });
         }
         else {
+            var otp = Math.floor(1000 + Math.rando() * 9000)
             const salt = await bcrypt.genSalt(10);
             var passowrdpass = await bcrypt.hash(req.body.password, 10)
             //  salt=req.body.passowrd
             //  res.send(salt)
             req.body.password = passowrdpass
-
+            req.body.otp = otp
             var user = await User.create(req.body)
             if (user) {
                 user.token = await jwt.sign({ time: Date(), userId: user._id }, "ck")
@@ -34,7 +40,7 @@ export const signup = async (req, res) => {
             }
             res.send({
                 status: true,
-                mgs:"Signup Successfully",
+                mgs: "Signup Successfully",
                 data: user
             });
         }
@@ -270,8 +276,8 @@ export const school = async (req, res) => {
 export const login = async (req, res) => {
 
     // res.send('gfgfg')
-    var bilal = await User.findOne({username:req.body.username});
-    res.send(bilal)
+    var bilal = await User.findOne({ username: req.body.username });
+    // res.send(bilal)
     if (bilal) {
         var chechpassword = await bcrypt.compare(req.body.password, bilal.password)
         // res.send(chechpassword)
@@ -293,55 +299,55 @@ export const login = async (req, res) => {
         }
     }
 }
-    
-    // fs. readFile("royal.josn",async(err,data)=>{
-    //   var oldData = JSON.parse(data)
-    //     var nweData=req.body;
-    //     //console.log(nweData)
+
+// fs. readFile("royal.josn",async(err,data)=>{
+//   var oldData = JSON.parse(data)
+//     var nweData=req.body;
+//     //console.log(nweData)
 
 
-    //     console.log(oldData)
-    //     if (nweData.email == oldData.email) {
+//     console.log(oldData)
+//     if (nweData.email == oldData.email) {
 
-    //         //console.log("email pass kare",email )
-    //        oldData.token = jwt.sign({time:Date(),userId:11},"rttrerer")
-    //      var validPassword= await bcrypt.compare(oldData.password,nweData.$2b$11$XJ5Cuvmi4Yr4szKZzZN3v.UxJgbASqyk46oI9UkLUql39TpvN7LEW)
-    //     //  console.log(validPassword)
-    //     //b.token = jwt.sign({time:Date(),userId:11},"rttrerer")
-    //     if (validPassword) {
-
-
-
-    //         //   b.token = jwt.sign({time:Date(),userId:11},"rttrerer")
-    //         res.send({
-    //             status:true,
-    //             msg:"right",
-    //             data:oldData    
-
-    //         })
+//         //console.log("email pass kare",email )
+//        oldData.token = jwt.sign({time:Date(),userId:11},"rttrerer")
+//      var validPassword= await bcrypt.compare(oldData.password,nweData.$2b$11$XJ5Cuvmi4Yr4szKZzZN3v.UxJgbASqyk46oI9UkLUql39TpvN7LEW)
+//     //  console.log(validPassword)
+//     //b.token = jwt.sign({time:Date(),userId:11},"rttrerer")
+//     if (validPassword) {
 
 
 
+//         //   b.token = jwt.sign({time:Date(),userId:11},"rttrerer")
+//         res.send({
+//             status:true,
+//             msg:"right",
+//             data:oldData    
 
-    //     }else{
-    //         res.send({
-    //             status:false,
-    //             msg:"wrong",
-    //             data:{}
-    //         })
-    //     }
+//         })
 
-    //     } else{
-    //     res.send({
-    //         status:false,
-    //         msg:"Email does not exist",
-    //         data:{email:nweData.email}
-    //     })
 
-    //     }
-    // res.send([oldData.email,nweData.email])
 
-    // })
+
+//     }else{
+//         res.send({
+//             status:false,
+//             msg:"wrong",
+//             data:{}
+//         })
+//     }
+
+//     } else{
+//     res.send({
+//         status:false,
+//         msg:"Email does not exist",
+//         data:{email:nweData.email}
+//     })
+
+//     }
+// res.send([oldData.email,nweData.email])
+
+// })
 
 
 
@@ -509,22 +515,60 @@ export const datea = async (req, res) => {
 
 
 export const ResendOtp = async (req, res) => {
-    var otp = 12345    
-    req.body.otp=otp
-    var data = await User.findByIdAndUpdate({_id:req.body.id},req.body)
-    if(data){
-       data.otp = otp
-       res.send({
-           status:true,
-           msg:"right",
-           data:data
-       })
-    }else{
-       res.send({
-           status:false,
-           msg:"worng",
-           data:data
-       })
+    var otp = 12345
+    req.body.otp = otp
+    var data = await User.findByIdAndUpdate({ _id: req.body.id }, req.body)
+    if (data) {
+        data.otp = otp
+        res.send({
+            status: true,
+            msg: "right",
+            data: data
+        })
+    } else {
+        res.send({
+            status: false,
+            msg: "worng",
+            data: data
+        })
 
     }
-       }
+}
+
+
+export const Forgetpassword = async (req, res) => {
+    var usercheck = await User.findOne({ username: req.body.username })
+    if (usercheck) {
+        var otp = Math.floor(1000 + Math.random() * 9000);
+        req.body.otp = otp
+        const emailData = await nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            prot: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: "bilalbhati011@gmail.com",
+                pass: "ertdjjvuuklcpgxl"
+            }
+        })
+        const emailpass = {
+            from: "bilalbhati011@gmail.com",
+            to: "bilalbhati011@gmail.com",
+            subject: "Forget psaaword",
+            html: "<P> OTP:" + otp + "</p>"
+        }
+        emailData.sendMail(emailpass, function (eorr, info) {
+            if (eorr) {
+                console.log(eorr)
+
+            } else {
+                console.log("email has been send", info.response)
+            }
+        })
+        var userDataupdate = await User.findOneAndUpdate({ username: req.body.username })
+        userDataupdate.otp = req.body.otp
+        res.send(userDataupdate)
+    } else {
+
+    }
+}
