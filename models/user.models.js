@@ -25,7 +25,7 @@ const user = new mongoose.Schema({
         type: Number,
         required: true
     },
-    isnumber_verified: {
+    isemail_verified: {
         type: Boolean,
         required: false,
         default: false

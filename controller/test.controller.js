@@ -15,7 +15,7 @@ export const signup = async (req, res) => {
         if (pass) {
             res.send({
                 status: true,
-                mgs: "Email already exist.",
+                mgs: "username already exist.",
                 data: {}
             });
         } else if (mobilecheckout) {
@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
             });
         }
         else {
-            var otp = Math.floor(1000 + Math.rando() * 9000)
+            var otp = Math.floor(1000 + Math.random() * 9000)
             const salt = await bcrypt.genSalt(10);
             var passowrdpass = await bcrypt.hash(req.body.password, 10)
             //  salt=req.body.passowrd
@@ -548,7 +548,7 @@ export const Forgetpassword = async (req, res) => {
             requireTLS: true,
             auth: {
                 user: "bilalbhati011@gmail.com",
-                pass: "ertdjjvuuklcpgxl"
+                pass: "lchhmdfytgkxcdsv"
             }
         })
         const emailpass = {
@@ -565,10 +565,66 @@ export const Forgetpassword = async (req, res) => {
                 console.log("email has been send", info.response)
             }
         })
-        var userDataupdate = await User.findOneAndUpdate({ username: req.body.username })
+        var userDataupdate = await User.findOneAndUpdate({ username: req.body.username }, req.body)
         userDataupdate.otp = req.body.otp
-        res.send(userDataupdate)
+        res.send({
+            status: true,
+            mgs: "forgat password api is crrect",
+            data: userDataupdate
+        })
     } else {
+        res.send({
+            status: false,
+            mgs: "forget password api is not crrect",
+            data: {}
 
+        })
+    }
+}
+
+
+
+export const verifyotp = async (req, res) => {
+    // res.send("rererer")
+
+    const userDataupdate = await User.findOne({ username: req.body.username, otp: req.body.otp })
+    if (userDataupdate) {
+        var DataToUpdate = {}
+        DataToUpdate.isemail_verified = true
+        await User.findOneAndUpdate({ username: userDataupdate.username }, DataToUpdate)
+        userDataupdate.isemail_verified = true
+        res.send({
+            status: true,
+            mgs: "VreifyOTP is cerret",
+            data: userDataupdate
+        })
+    } else {
+        res.send({
+            status: false,
+            mgs: "VreifyOTP is not cerret",
+            data: {}
+        })
+    }
+}
+
+
+
+export const resetpassword = async (req, res) => {
+    const resetuser = await User.findOne({ username: req.body.username })
+    if (resetuser) {
+        var passworCheCk = await bcrypt.compare(req.body.password, resetuser.password)
+        if (passworCheCk) {
+            var Datapass = {}
+            var passowrdHash = await bcrypt.hash(req.body.new_pass, 10)
+            Datapass.password = passowrdHash
+            await User.findOneAndUpdate({username:req.body.username},Datapass)
+            res.send({ status: true, mgs: "Password Reset Succesfully", data: resetuser })
+
+        } else {
+
+            res.send({ status: false, mgs: "invalid old password", data: {} })
+        }
+    } else {
+        res.send({ status: false, mgs: "user not found given email" })
     }
 }
