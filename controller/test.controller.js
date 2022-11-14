@@ -26,13 +26,13 @@ export const signup = async (req, res) => {
             });
         }
         else {
-            var otp = Math.floor(1000 + Math.random() * 9000)
+            // var otp = Math.floor(1000 + Math.random() * 9000)
             const salt = await bcrypt.genSalt(10);
             var passowrdpass = await bcrypt.hash(req.body.password, 10)
             //  salt=req.body.passowrd
             //  res.send(salt)
             req.body.password = passowrdpass
-            req.body.otp = otp
+            // req.body.otp = otp
             var user = await User.create(req.body)
             if (user) {
                 user.token = await jwt.sign({ time: Date(), userId: user._id }, "ck")
@@ -515,7 +515,7 @@ export const datea = async (req, res) => {
 
 
 export const ResendOtp = async (req, res) => {
-    var otp = 12345
+    var otp = Math.floor(1000 + Math.random() * 9000)
     req.body.otp = otp
     var data = await User.findByIdAndUpdate({ _id: req.body.id }, req.body)
     if (data) {
