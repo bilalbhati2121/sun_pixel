@@ -10,12 +10,12 @@ export const mail = async (name, email, token) => {
 export const signup = async (req, res) => {
     // res.send("yes !")
     try {
-        const pass = await User.findOne({ username: req.body.username })
+        const pass = await User.findOne({ email: req.body.email })
         const mobilecheckout = await User.findOne({ mobile: req.body.mobile })
         if (pass) {
             res.send({
-                status: true,
-                mgs: "username already exist.",
+                status: false,
+                mgs: "email already exist.",
                 data: {}
             });
         } else if (mobilecheckout) {
@@ -26,13 +26,13 @@ export const signup = async (req, res) => {
             });
         }
         else {
-            // var otp = Math.floor(1000 + Math.random() * 9000)
+             var otp = Math.floor(1000 + Math.random() * 9000)
             const salt = await bcrypt.genSalt(10);
             var passowrdpass = await bcrypt.hash(req.body.password, 10)
             //  salt=req.body.passowrd
             //  res.send(salt)
             req.body.password = passowrdpass
-            // req.body.otp = otp
+            req.body.otp = otp
             var user = await User.create(req.body)
             if (user) {
                 user.token = await jwt.sign({ time: Date(), userId: user._id }, "ck")
@@ -40,7 +40,7 @@ export const signup = async (req, res) => {
             }
             res.send({
                 status: true,
-                mgs: "Signup Successfully",
+                mgs: "Signup api Successfully",
                 data: user
             });
         }
@@ -276,7 +276,7 @@ export const school = async (req, res) => {
 export const login = async (req, res) => {
 
     // res.send('gfgfg')
-    var bilal = await User.findOne({ username: req.body.username });
+    var bilal = await User.findOne({ email: req.body.email });
     // res.send(bilal)
     if (bilal) {
         var chechpassword = await bcrypt.compare(req.body.password, bilal.password)
@@ -537,7 +537,7 @@ export const ResendOtp = async (req, res) => {
 
 
 export const Forgetpassword = async (req, res) => {
-    var usercheck = await User.findOne({ username: req.body.username })
+    var usercheck = await User.findOne({ email: req.body.email })
     if (usercheck) {
         var otp = Math.floor(1000 + Math.random() * 9000);
         req.body.otp = otp
@@ -565,7 +565,7 @@ export const Forgetpassword = async (req, res) => {
                 console.log("email has been send", info.response)
             }
         })
-        var userDataupdate = await User.findOneAndUpdate({ username: req.body.username }, req.body)
+        var userDataupdate = await User.findOneAndUpdate({ email: req.body.email }, req.body)
         userDataupdate.otp = req.body.otp
         res.send({
             status: true,
@@ -587,11 +587,11 @@ export const Forgetpassword = async (req, res) => {
 export const verifyotp = async (req, res) => {
     // res.send("rererer")
 
-    const userDataupdate = await User.findOne({ username: req.body.username, otp: req.body.otp })
+    const userDataupdate = await User.findOne({ email: req.body.email, otp: req.body.otp })
     if (userDataupdate) {
         var DataToUpdate = {}
         DataToUpdate.isemail_verified = true
-        await User.findOneAndUpdate({ username: userDataupdate.username }, DataToUpdate)
+        await User.findOneAndUpdate({ email: userDataupdate.email }, DataToUpdate)
         userDataupdate.isemail_verified = true
         res.send({
             status: true,
@@ -610,14 +610,14 @@ export const verifyotp = async (req, res) => {
 
 
 export const resetpassword = async (req, res) => {
-    const resetuser = await User.findOne({ username: req.body.username })
+    const resetuser = await User.findOne({ email: req.body.email })
     if (resetuser) {
         var passworCheCk = await bcrypt.compare(req.body.password, resetuser.password)
         if (passworCheCk) {
             var Datapass = {}
             var passowrdHash = await bcrypt.hash(req.body.new_pass, 10)
             Datapass.password = passowrdHash
-            await User.findOneAndUpdate({username:req.body.username},Datapass)
+            await User.findOneAndUpdate({email:req.body.email},Datapass)
             res.send({ status: true, mgs: "Password Reset Succesfully", data: resetuser })
 
         } else {
