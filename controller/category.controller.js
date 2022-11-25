@@ -4,30 +4,19 @@ export const categoryprodouct = async (req, res) => {
       const categoryvalue = await category.findOne({ name: req.body.name })
       if (categoryvalue) {
          res.send({
-            status: true,
-            mgs: "yeh sahi hai",
-            data: categoryvalue
+            status: false,
+            mgs: "Category already exist",
+            data: {}
          })
          return;
       }
       var categorydata = await category.create(req.body)
-      if (categorydata) {
-         res.send({
-            status: true,
-            mgs: "yeh category sahi hai",
-            data: categorydata
-         })
-      } else {
-         res.send({
-            status: false,
-            mgs: "yeh category sahi nhi hai",
-            data: {}
-         })
-      }
+     res.send(categorydata) 
+     
    } catch (err) {
       res.send({
          status: false,
-         mgs: "yeh category sahi nhi hai",
+         mgs: "SOmething wrong with request.",
          data: err
       })
    }
@@ -83,4 +72,20 @@ if (deleteekarene) {
    })
 }
 
+}
+export const GetAll=async(req,res)=>{
+   const alldata=await category.find({status:"active"})
+if (alldata) {
+   res.send({
+      status:true,
+      mgs:"Data fetch successsfiully.",
+      data:alldata
+   })
+}else{
+   res.send({
+      status: false,
+      msg: "Categories not found.",
+      data: []
+   })
+}
 }
