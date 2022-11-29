@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import ProductImages from "./product.image.models.js";
 const productschema = new mongoose.Schema({
     name: { type: String, requierd: true },
     price: { type: String, required: true },
@@ -10,6 +11,7 @@ const productschema = new mongoose.Schema({
         enum: ["Active", "Deactive"],
         default: "Active"
     },
+    image:[ProductImages],
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 

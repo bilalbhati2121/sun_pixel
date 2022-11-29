@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const ProductImages= new mongoose.schema({
+const ProductImages= new mongoose.Schema({
     path:{
         type:String,
         requierd:true

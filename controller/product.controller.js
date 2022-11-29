@@ -5,7 +5,7 @@ export const cerate = async (req, res) => {
   // res.send("yes !")
   // try {
 var imagesdata=[]
-req.files.forEach((image,ok) => {
+req.files.forEach(image => {
 //   res.send(image)
 // return;
   var imageType='';
@@ -16,7 +16,7 @@ req.files.forEach((image,ok) => {
   }
   var imagerules={
       path:image.filename,
-      fullpath:"http://localhost:3002"+image.path,
+      fullpath:"localhost:3002/"+image.path,
       type:imageType
   }
   imagesdata.push(imagerules)
@@ -25,7 +25,7 @@ req.files.forEach((image,ok) => {
 
 
 
-req.body.images=imagesdata
+req.body.image=imagesdata
 
     const productCreate = await Product.create(req.body);
     res.send(productCreate)
